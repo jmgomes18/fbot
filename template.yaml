@@ -28,13 +28,26 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: src/
-      Handler: modules/users/main.lambda_handler
+      Handler: modules/users/main.insert_user_handler
       Runtime: python3.8
       Events:
-        HelloWorld:
+        CreateUser:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /user
+            Method: get
+
+  ListUserFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: src/
+      Handler: modules/users/main.list_user_handler
+      Runtime: python3.8
+      Events:
+        ListUser:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /list_user
             Method: get
 
 Outputs:
@@ -42,7 +55,7 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   FBotApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Description: "API Gateway endpoint URL for Prod stage for Handle Users"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
   HelloWorldFunction:
     Description: "Hello World Lambda Function ARN"
@@ -55,4 +68,10 @@ Outputs:
     Value: !GetAtt CreateUserFunction.Arn
   CreateUserFunctionIamRole:
     Description: "Implicit IAM Role created for Create User function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+    Value: !GetAtt CreateUserFunctionRole.Arn
+  ListUserFunction:
+    Description: "Lists User from given ID"
+    Value: !GetAtt ListUserFunction.Arn
+  ListUserFunctionIamRole:
+    Description: "Implicit IAM Role created for List User function"
+    Value: !GetAtt ListUserFunctionRole.Arn
