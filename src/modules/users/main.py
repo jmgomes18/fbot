@@ -1,12 +1,17 @@
 import json
-
+import logging
 from utils.json_encoder import MyJSONEncoder
 from infra.repositories.user import UserRepository
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def insert_user_handler(event, context):
 
-    UserRepository.insert_user()
+    data = event["body"]
+    for users in data:
+        UserRepository.insert_user(users)
 
     return {
         "statusCode": 201,

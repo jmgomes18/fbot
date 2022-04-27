@@ -6,10 +6,10 @@ class UserRepository:
     """User Reposiory"""
 
     @classmethod
-    def insert_user(cls):
+    def insert_user(cls, data):
         with DBConnectionHandler() as db_conn:
             try:
-                new_user = Users(name="João Marco", password="123456")
+                new_user = Users(data)
                 db_conn.session.add(new_user)
                 db_conn.session.commit()
             except:

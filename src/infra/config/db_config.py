@@ -1,12 +1,19 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# postgresql://{user}:{password}@{host}:{port}/{database}?sslmode=require
+
 class DBConnectionHandler:
     """Sqlalchemy database connection"""
 
     def __init__(self):
-        self.__connection_string = "mysql+pymysql://admin:3yK1gwZCYBx42NBpt449@fbot-api.c4xmwex5k2jk.sa-east-1.rds.amazonaws.com/fbot_api"
+        self.__database = os.environ.get("DATABASE")
+        self.__host = os.environ.get("DB_HOST")
+        self.__user = os.environ.get("DB_USER")
+        self.__password = os.environ.get("DB_PASS")
+        self.__connection_string = "mysql+pymysql://{}:{}@{}/{}".format(
+            self.__user, self.__password, self.__host, self.__database
+        )
         self.session = None
 
     def get_engine(self):

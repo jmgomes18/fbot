@@ -6,9 +6,40 @@ Description: >
   Sample SAM Template for fbot-sam
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Parameters:
+  DbHost:
+    Type: String
+    Description: host
+    Default: localhost
+  DbPASSWORD:
+    Type: String
+    Description: host
+    Default: pass
+  Database: 
+    Type: String
+    Description: host
+    Default: database
+  Port:
+    Type: String
+    Description: host
+    Default: "3306"
+  DbUSER:
+    Type: String
+    Description: host
+    Default: admin
+
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 10
+    Environment:
+      Variables:
+        DB_HOST: !Ref DbHost
+        DB_PASSWORD: !Ref DbPASSWORD
+        DATABASE: !Ref Database
+        DB_PORT: !Ref Port
+        DB_USER: !Ref DbUSER
+
+
 
 Resources:
   HelloWorldFunction:
@@ -35,7 +66,7 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /user
-            Method: get
+            Method: post
 
   ListUserFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
